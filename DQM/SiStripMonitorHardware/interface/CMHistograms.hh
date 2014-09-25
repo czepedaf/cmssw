@@ -48,7 +48,7 @@ public:
 		  std::ostringstream* pDebugStream
 		  );
 
-  void fillHistograms(const std::vector<CMvalues>& aVec, float aTime, unsigned int aFedId);
+  void fillHistograms(const std::vector<CMvalues>& aVec, float aTime,unsigned int aFedId);//float aLumisection,unsigned int aFedId);
 
 
    //book the top level histograms
@@ -82,10 +82,12 @@ private:
 
   HistogramConfig meanCMPerFedvsFedId_;
   HistogramConfig meanCMPerFedvsTime_;
+  HistogramConfig meanCMPerFedvsLumisection_;
 
   //CM-previous value for all APVs
   HistogramConfig variationsPerFedvsFedId_;
   HistogramConfig variationsPerFedvsTime_;
+  HistogramConfig variationsPerFedvsLumisection_;
 
   HistogramConfig medianAPV1vsAPV0perFED_;
   HistogramConfig medianAPV0minusAPV1perFED_;

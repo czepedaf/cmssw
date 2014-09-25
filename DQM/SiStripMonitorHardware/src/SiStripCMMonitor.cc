@@ -94,6 +94,7 @@ class SiStripCMMonitorPlugin : public edm::EDAnalyzer
   //do histos vs time with time=event number. Default time = orbit number (s)
   bool fillWithEvtNum_;
   bool fillWithLocalEvtNum_;
+  bool (fillWithLumisection_);
   //print debug messages when problems are found: 1=error debug, 2=light debug, 3=full debug
   unsigned int printDebug_;
   //write the DQMStore to a root file at the end of the job
@@ -131,6 +132,7 @@ SiStripCMMonitorPlugin::SiStripCMMonitorPlugin(const edm::ParameterSet& iConfig)
     fillAllDetailedHistograms_(iConfig.getUntrackedParameter<bool>("FillAllDetailedHistograms",false)),
     fillWithEvtNum_(iConfig.getUntrackedParameter<bool>("FillWithEventNumber",false)),
     fillWithLocalEvtNum_(iConfig.getUntrackedParameter<bool>("FillWithLocalEventNumber",false)),
+    fillWithLumisection_(iConfig.getUntrackedParameter<bool>("FillWithLumisection",false)),
     printDebug_(iConfig.getUntrackedParameter<unsigned int>("PrintDebugMessages",1)),
     writeDQMStore_(iConfig.getUntrackedParameter<bool>("WriteDQMStore",false)),
     dqmStoreFileName_(iConfig.getUntrackedParameter<std::string>("DQMStoreFileName","DQMStore.root")),
@@ -347,9 +349,11 @@ SiStripCMMonitorPlugin::analyze(const edm::Event& iEvent,
     float lTime = 0;
     if (fillWithEvtNum_) lTime = iEvent.id().event();
     else if (fillWithLocalEvtNum_) lTime = evt_;//iEvent.id().event();
+    else if (fillWithLumisection_) lTime = iEvent.orbitNumber()/262144.;
     else lTime = iEvent.orbitNumber()/11223.;
 
     cmHists_.fillHistograms(values,lTime,fedId);
+
 
     //if (printDebug_ > 0 && isBeingFilled && firstEvent) edm::LogVerbatim("SiStripMonitorHardware") << infoStream.str();
  
