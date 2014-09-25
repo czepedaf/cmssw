@@ -44,7 +44,8 @@ public:
   void fillCountersHistograms(const FEDErrors::FEDCounters & aFedLevelCounters, 
 			      const FEDErrors::ChannelCounters & aChLevelCounters,
 			      const unsigned int aMaxSize,
-			      const double aTime);
+			      const double aTime,
+			      const double aLS = 0);
 
   void fillFEDHistograms(FEDErrors & aFedError,
 			 const unsigned int aEvtSize,
@@ -103,6 +104,8 @@ private:
   HistogramConfig fedEventSize_;
   HistogramConfig fedMaxEventSizevsTime_;
 
+HistogramConfig fedMaxEventSizevsLumisection_;                           
+
   HistogramConfig nFEDErrors_, 
     nFEDDAQProblems_, 
     nFEDsWithFEProblems_, 
@@ -118,11 +121,20 @@ private:
   HistogramConfig nFEDCorruptBuffersvsTime_;
   HistogramConfig nFEDsWithFEProblemsvsTime_;
 
+
+  HistogramConfig nFEDErrorsvsLumisection_;                      
+  HistogramConfig nFEDCorruptBuffersvsLumisection_;              
+  HistogramConfig nFEDsWithFEProblemsvsLumisection_;            
+
+
   HistogramConfig nTotalBadChannels_;
   HistogramConfig nTotalBadActiveChannels_;
 
   HistogramConfig nTotalBadChannelsvsTime_;
   HistogramConfig nTotalBadActiveChannelsvsTime_;
+
+  HistogramConfig nTotalBadChannelsvsLumisection_;                
+  HistogramConfig nTotalBadActiveChannelsvsLumisection_;          
 
   HistogramConfig nAPVStatusBit_;
   HistogramConfig nAPVError_;
@@ -135,6 +147,12 @@ private:
   HistogramConfig nAPVAddressErrorvsTime_;
   HistogramConfig nUnlockedvsTime_;
   HistogramConfig nOutOfSyncvsTime_;
+
+  HistogramConfig nUnlockedvsLumisection_;                   
+  HistogramConfig nAPVStatusBitvsLumisection_;                 
+  HistogramConfig nAPVErrorvsLumisection_;                 
+  HistogramConfig nAPVAddressErrorvsLumisection_;          
+  HistogramConfig nOutOfSyncvsLumisection_;                  
 
   //top level histograms
   HistogramConfig anyFEDErrors_, 
