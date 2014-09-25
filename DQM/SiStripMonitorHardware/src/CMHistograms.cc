@@ -29,8 +29,10 @@ void CMHistograms::initialise(const edm::ParameterSet& iConfig,
 
   getConfigForHistogram(meanCMPerFedvsFedId_,"MeanCMPerFedvsFedId",iConfig,pDebugStream);
   getConfigForHistogram(meanCMPerFedvsTime_,"MeanCMPerFedvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(meanCMPerFedvsLumisection_,"MeanCMPerFedvsLumisection",iConfig,pDebugStream);
   getConfigForHistogram(variationsPerFedvsFedId_,"VariationsPerFedvsFedId",iConfig,pDebugStream);
   getConfigForHistogram(variationsPerFedvsTime_,"VariationsPerFedvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(variationsPerFedvsLumisection_,"VariationsPerFedvsLumisection",iConfig,pDebugStream);
 
   getConfigForHistogram(medianAPV1vsAPV0perFED_,"MedianAPV1vsAPV0perFED",iConfig,pDebugStream);
   getConfigForHistogram(medianAPV0minusAPV1perFED_,"MedianAPV0minusAPV1perFED",iConfig,pDebugStream);
@@ -49,7 +51,7 @@ void CMHistograms::initialise(const edm::ParameterSet& iConfig,
   }
 }
 
-void CMHistograms::fillHistograms(const std::vector<CMvalues>& aVec, float aTime, unsigned int aFedId)
+void CMHistograms::fillHistograms(const std::vector<CMvalues>& aVec, float aTime,unsigned int aFedId) 
 {
 
   if (doFed_[aFedId]){
@@ -91,6 +93,7 @@ void CMHistograms::fillHistograms(const std::vector<CMvalues>& aVec, float aTime
   fillHistogram(meanCMPerFedvsTime_,aTime,lMean);
   fillHistogram(variationsPerFedvsFedId_,aFedId,lMean-lPrevMean);
   fillHistogram(variationsPerFedvsTime_,aTime,lMean-lPrevMean);
+  
 
 
 }
@@ -140,7 +143,12 @@ void CMHistograms::bookTopLevelHistograms(DQMStore* dqm)
 	      "<CM> vs time",
 	      0,1000,
 	      "Time","<CM>^{FED}");
-  
+
+  bookProfile(meanCMPerFedvsLumisection_,
+	      "MeanCMPerFedvsLumisection",
+	      "<CM> vs lumisection",
+	      0,1000,
+	      "Lumisection","<CM>^{FED}");
   
   bookProfile(variationsPerFedvsFedId_,
 	      "VariationsPerFedvsFedId",
@@ -153,6 +161,12 @@ void CMHistograms::bookTopLevelHistograms(DQMStore* dqm)
 	      "<CM> vs time",
 	      0,1000,
 	      "Time","<CM>^{FED}_{t}-<CM>^{FED}_{t-1}");
+
+  bookProfile(variationsPerFedvsLumisection_,
+	      "VariationsPerFedvsLumisection",
+	      "<CM> vs lumisection",
+	      0,1000,
+	      "Lumisection","<CM>^{FED}_{t}-<CM>^{FED}_{t-1}");
   
 
   

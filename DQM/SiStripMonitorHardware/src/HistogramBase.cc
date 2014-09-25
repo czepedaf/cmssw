@@ -45,6 +45,7 @@ void HistogramBase::getConfigForHistogram(HistogramConfig & aConfig,
   const std::string psetName = configName+std::string("HistogramConfig");
 
   bool isTimeHisto = configName.find("vsTime") != configName.npos;
+    bool isLumisectionHisto = configName.find("vsLumisection") != configName.npos;
 
   if (psetContainingConfigPSet.exists(psetName)) {
     const edm::ParameterSet& pset = psetContainingConfigPSet.getUntrackedParameter<edm::ParameterSet>(psetName);
@@ -80,6 +81,13 @@ void HistogramBase::getConfigForHistogram(HistogramConfig & aConfig,
       aConfig.nBins = (pset.exists("NBins") ? pset.getUntrackedParameter<unsigned int>("NBins") : 600);
       aConfig.min = (pset.exists("Min") ? pset.getUntrackedParameter<double>("Min") : 0);
       aConfig.max = (pset.exists("Max") ? pset.getUntrackedParameter<double>("Max") : 3600);
+    } 
+  if (psetContainingConfigPSet.exists("LumisectionHistogramConfig") && isLumisectionHisto)
+    {
+      const edm::ParameterSet& pset = psetContainingConfigPSet.getUntrackedParameter<edm::ParameterSet>("LumisectionHistogramConfig");
+      aConfig.nBins = (pset.exists("NBins") ? pset.getUntrackedParameter<unsigned int>("NBins") : 2400);
+      aConfig.min = (pset.exists("Min") ? pset.getUntrackedParameter<double>("Min") : 0);
+      aConfig.max = (pset.exists("Max") ? pset.getUntrackedParameter<double>("Max") : 150);
     } 
   
 }

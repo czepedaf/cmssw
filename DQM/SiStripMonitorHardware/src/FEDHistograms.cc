@@ -23,6 +23,7 @@ void FEDHistograms::initialise(const edm::ParameterSet& iConfig,
   
   getConfigForHistogram(fedEventSize_,"FedEventSize",iConfig,pDebugStream);
   getConfigForHistogram(fedMaxEventSizevsTime_,"FedMaxEventSizevsTime",iConfig,pDebugStream);
+  getConfigForHistogram(fedMaxEventSizevsLumisection_,"FedMaxEventSizevsLumisection",iConfig,pDebugStream);   
 
   getConfigForHistogram(dataPresent_,"DataPresent",iConfig,pDebugStream);
   getConfigForHistogram(anyFEDErrors_,"AnyFEDErrors",iConfig,pDebugStream);
@@ -68,8 +69,12 @@ void FEDHistograms::initialise(const edm::ParameterSet& iConfig,
   getConfigForHistogram(nFEDsWithFEBadMajorityAddresses_,"nFEDsWithFEBadMajorityAddresses",iConfig,pDebugStream);
 
   getConfigForHistogram(nFEDErrorsvsTime_,"nFEDErrorsvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(nFEDErrorsvsLumisection_,"nFEDErrorsvsLumisection",iConfig,pDebugStream);                         
   getConfigForHistogram(nFEDCorruptBuffersvsTime_,"nFEDCorruptBuffersvsTime",iConfig,pDebugStream);
-  getConfigForHistogram(nFEDsWithFEProblemsvsTime_,"nFEDsWithFEProblemsvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(nFEDCorruptBuffersvsLumisection_,"nFEDCorruptBuffersvsLumisection",iConfig,pDebugStream);         
+  getConfigForHistogram(nFEDsWithFEProblemsvsTime_,"nFEDsWithFEProblemsvsTime",iConfig,pDebugStream);   
+  getConfigForHistogram(nFEDsWithFEProblemsvsLumisection_,"nFEDsWithFEProblemsvsLumisection",iConfig,pDebugStream);   
+
 
   getConfigForHistogram(nUnconnectedChannels_,"nUnconnectedChannels",iConfig,pDebugStream);
 
@@ -78,6 +83,8 @@ void FEDHistograms::initialise(const edm::ParameterSet& iConfig,
 
   getConfigForHistogram(nTotalBadChannelsvsTime_,"nTotalBadChannelsvsTime",iConfig,pDebugStream);
   getConfigForHistogram(nTotalBadActiveChannelsvsTime_,"nTotalBadActiveChannelsvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(nTotalBadChannelsvsLumisection_,"nTotalBadChannelsvsLumisection",iConfig,pDebugStream);           
+  getConfigForHistogram(nTotalBadActiveChannelsvsLumisection_,"nTotalBadActiveChannelsvsLumisection",iConfig,pDebugStream);  
 
   getConfigForHistogram(nAPVStatusBit_,"nAPVStatusBit",iConfig,pDebugStream);
   getConfigForHistogram(nAPVError_,"nAPVError",iConfig,pDebugStream);
@@ -86,10 +93,15 @@ void FEDHistograms::initialise(const edm::ParameterSet& iConfig,
   getConfigForHistogram(nOutOfSync_,"nOutOfSync",iConfig,pDebugStream);
 
   getConfigForHistogram(nAPVStatusBitvsTime_,"nAPVStatusBitvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(nAPVStatusBitvsLumisection_,"nAPVStatusBitvsLumisection",iConfig,pDebugStream);    
   getConfigForHistogram(nAPVErrorvsTime_,"nAPVErrorvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(nAPVErrorvsLumisection_,"nAPVErrorvsLumisection",iConfig,pDebugStream);                 
   getConfigForHistogram(nAPVAddressErrorvsTime_,"nAPVAddressErrorvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(nAPVAddressErrorvsLumisection_,"nAPVAddressErrorvsLumisection",iConfig,pDebugStream);   
   getConfigForHistogram(nUnlockedvsTime_,"nUnlockedvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(nUnlockedvsLumisection_,"nUnlockedvsLumisection",iConfig,pDebugStream);                   
   getConfigForHistogram(nOutOfSyncvsTime_,"nOutOfSyncvsTime",iConfig,pDebugStream);
+  getConfigForHistogram(nOutOfSyncvsLumisection_,"nOutOfSyncvsLumisection",iConfig,pDebugStream);                 
 
   getConfigForHistogram(tkMapConfig_,"TkHistoMap",iConfig,pDebugStream);
 
@@ -99,6 +111,8 @@ void FEDHistograms::initialise(const edm::ParameterSet& iConfig,
   getConfigForHistogram(feTimeDiffTECF_,"FETimeDiffTECF",iConfig,pDebugStream);
 
   getConfigForHistogram(feTimeDiffvsDBX_,"FETimeDiffvsDBX",iConfig,pDebugStream);
+
+
 
   getConfigForHistogram(apveAddress_,"ApveAddress",iConfig,pDebugStream);
   getConfigForHistogram(feMajAddress_,"FeMajAddress",iConfig,pDebugStream);
@@ -115,9 +129,10 @@ void FEDHistograms::initialise(const edm::ParameterSet& iConfig,
 void FEDHistograms::fillCountersHistograms(const FEDErrors::FEDCounters & fedLevelCounters, 
 					   const FEDErrors::ChannelCounters & chLevelCounters, 
 					   const unsigned int aMaxSize,
-					   const double aTime )
+					   const double aTime , const double aLS )
 {
   fillHistogram(fedMaxEventSizevsTime_,aTime,aMaxSize);
+  fillHistogram(fedMaxEventSizevsLumisection_,aLS,aMaxSize);    
 
   fillHistogram(nFEDErrors_,fedLevelCounters.nFEDErrors);
   fillHistogram(nFEDDAQProblems_,fedLevelCounters.nDAQProblems);
@@ -128,10 +143,12 @@ void FEDHistograms::fillCountersHistograms(const FEDErrors::FEDCounters & fedLev
   fillHistogram(nFEDsWithMissingFEs_,fedLevelCounters.nFEDsWithMissingFEs);
   fillHistogram(nBadChannelStatusBits_,fedLevelCounters.nBadChannels);
   fillHistogram(nBadActiveChannelStatusBits_,fedLevelCounters.nBadActiveChannels);
-
+  fillHistogram(nFEDErrorsvsLumisection_,aLS,fedLevelCounters.nFEDErrors);                          
   fillHistogram(nFEDErrorsvsTime_,aTime,fedLevelCounters.nFEDErrors);
   fillHistogram(nFEDCorruptBuffersvsTime_,aTime,fedLevelCounters.nCorruptBuffers);
+  fillHistogram(nFEDCorruptBuffersvsLumisection_,aLS,fedLevelCounters.nCorruptBuffers);              
   fillHistogram(nFEDsWithFEProblemsvsTime_,aTime,fedLevelCounters.nFEDsWithFEProblems);
+  fillHistogram(nFEDsWithFEProblemsvsLumisection_,aLS,fedLevelCounters.nFEDsWithFEProblems); 
 
   fillHistogram(nUnconnectedChannels_,chLevelCounters.nNotConnected);
 
@@ -140,6 +157,8 @@ void FEDHistograms::fillCountersHistograms(const FEDErrors::FEDCounters & fedLev
 
   fillHistogram(nTotalBadChannelsvsTime_,aTime,fedLevelCounters.nTotalBadChannels);
   fillHistogram(nTotalBadActiveChannelsvsTime_,aTime,fedLevelCounters.nTotalBadActiveChannels);
+  fillHistogram(nTotalBadChannelsvsLumisection_,aLS,fedLevelCounters.nTotalBadChannels);           
+  fillHistogram(nTotalBadActiveChannelsvsLumisection_,aLS,fedLevelCounters.nTotalBadActiveChannels);  
   
   fillHistogram(nAPVStatusBit_,chLevelCounters.nAPVStatusBit);
   fillHistogram(nAPVError_,chLevelCounters.nAPVError);
@@ -152,6 +171,12 @@ void FEDHistograms::fillCountersHistograms(const FEDErrors::FEDCounters & fedLev
   fillHistogram(nAPVAddressErrorvsTime_,aTime,chLevelCounters.nAPVAddressError);
   fillHistogram(nUnlockedvsTime_,aTime,chLevelCounters.nUnlocked);
   fillHistogram(nOutOfSyncvsTime_,aTime,chLevelCounters.nOutOfSync);
+
+  fillHistogram(nAPVStatusBitvsLumisection_,aLS,chLevelCounters.nAPVStatusBit);     
+  fillHistogram(nAPVErrorvsLumisection_,aLS,chLevelCounters.nAPVError);             
+  fillHistogram(nAPVAddressErrorvsLumisection_,aLS,chLevelCounters.nAPVAddressError); 
+  fillHistogram(nUnlockedvsLumisection_,aLS,chLevelCounters.nUnlocked);               
+  fillHistogram(nOutOfSyncvsLumisection_,aLS,chLevelCounters.nOutOfSync);             
 
 }
 
@@ -234,6 +259,8 @@ void FEDHistograms::fillFEHistograms(const unsigned int aFedId,
     fillHistogram(apveAddress_,aFeLevelErrors.Apve);
     fillHistogram(feMajAddress_,aFeLevelErrors.FeMaj);  
   }
+
+
 }
 
 //fill a histogram if the pointer is not NULL (ie if it has been booked)
@@ -489,26 +516,31 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 		401,
 		-200,201,"#Delta_{TimeLoc}(FE-APVe)");
 
+
   bookHistogram(feTimeDiffTOB_,"FETimeDiffTOB",
 		"(TimeLoc FE - TimeLoc APVe) for TOB, when different",
 		401,
 		-200,201,"#Delta_{TimeLoc}(FE-APVe)");
+;
 
   bookHistogram(feTimeDiffTECB_,"FETimeDiffTECB",
 		"(TimeLoc FE - TimeLoc APVe) for TECB, when different",
 		401,
 		-200,201,"#Delta_{TimeLoc}(FE-APVe)");
 
+
   bookHistogram(feTimeDiffTECF_,"FETimeDiffTECF",
 		"(TimeLoc FE - TimeLoc APVe) for TECF, when different",
 		401,
 		-200,201,"#Delta_{TimeLoc}(FE-APVe)");
+
 
   book2DHistogram(feTimeDiffvsDBX_,"FETimeDiffvsDBX",
 		"(TimeLoc FE - TimeLoc APVe) vs DBX, when different",
 		  2000,-0.5, 1999.5,
 		  201,
 		  0,201,"DeltaBX","#Delta_{TimeLoc}(FE-APVe)");
+
 
 
   bookHistogram(apveAddress_,"ApveAddress",
@@ -625,6 +657,14 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      "Time",
 	      "Max FED buffer Size (B)"
 	      );
+  bookProfile(fedMaxEventSizevsLumisection_,                   
+	      "FedMaxEventSizevsLumisection",
+	      "Max FED buffer Size (B) per Event vs Lumisection",
+	      0,
+	      42241, //total number of channels
+	      "Lumisection",
+	      "Max FED buffer Size (B)"
+	      );
 
   bookProfile(nTotalBadChannelsvsTime_,
 	      "nTotalBadChannelsvsTime",
@@ -632,6 +672,14 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      0,
 	      42241, //total number of channels
 	      "Time",
+	      "Total # bad enabled channels"
+	      );
+  bookProfile(nTotalBadChannelsvsLumisection_,                  
+	      "nTotalBadChannelsvsLumisection",
+	      "Number of channels with any error vs Lumisection",
+	      0,
+	      42241, //total number of channels
+	      "Lumisection",
 	      "Total # bad enabled channels"
 	      );
 
@@ -642,6 +690,14 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      0,
 	      42241, //total number of channels
 	      "Time",
+	      "Total # bad active channels"
+	      );
+  bookProfile(nTotalBadActiveChannelsvsLumisection_,     
+	      "nTotalBadActiveChannelsvsLumisection",
+	      "Number of active channels with any error vs Lumisection",
+	      0,
+	      42241, //total number of channels
+	      "Lumisection",
 	      "Total # bad active channels"
 	      );
 
@@ -656,6 +712,18 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      "# FEDErrors"
 	      );
 
+  //dqm_->setCurrentFolder(lBaseDir+"/Trends/FED1");
+
+  bookProfile(nFEDErrorsvsLumisection_,                          
+	      "nFEDErrorsvsLumisection",
+	      "Number of FEDs with any error vs lumisection",                  
+	      0,
+	      42241, //total number of channels
+	      "Lumisection",
+	      "# FEDErrors"
+	      );
+  //  dqm_->setCurrentFolder(lBaseDir+"/Trends/LU");
+
   bookProfile(nFEDCorruptBuffersvsTime_,
 	      "nFEDCorruptBuffersvsTime",
 	      "Number of FEDs with corrupt buffer vs time",
@@ -664,6 +732,15 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      "Time",
 	      "# FEDCorruptBuffer"
 	      );
+
+bookProfile(nFEDCorruptBuffersvsLumisection_,
+              "nFEDCorruptBuffersvsLumisection",
+              "Number of FEDs with corrupt buffer vs Lumisection",              
+              0,
+              42241, //total number of channels
+              "Lumisection",
+              "# FEDCorruptBuffer"
+              );
 
   dqm_->setCurrentFolder(lBaseDir+"/Trends/FE");
 
@@ -676,6 +753,16 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      "# FEDsWithFEProblems"
 	      );
 
+
+ bookProfile(nFEDsWithFEProblemsvsLumisection_,
+              "nFEDsWithFEProblemsvsLumisection",
+	     "Number of FEDs with any FE error vs Luminisection",             
+              0,
+              42241, //total number of channels
+              "Lumisection",
+              "# FEDsWithFEProblems"
+              );
+
   dqm_->setCurrentFolder(lBaseDir+"/Trends/Fiber");
 
   bookProfile(nUnlockedvsTime_,
@@ -686,6 +773,14 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      "Time",
 	      "# channels unlocked "
 	      );
+  bookProfile(nUnlockedvsLumisection_,                     
+	      "nUnlockedvsLumisection",
+	      "Number of channels Unlocked vs Lumisection",
+	      0,
+	      42241, //total number of channels
+	      "Lumisection",
+	      "# channels unlocked "
+	      );
 
   bookProfile(nOutOfSyncvsTime_,
 	      "nOutOfSyncvsTime",
@@ -693,6 +788,14 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      0,
 	      42241, //total number of channels
 	      "Time",
+	      "# channels out-of-sync"
+	      );
+  bookProfile(nOutOfSyncvsLumisection_,                   
+	      "nOutOfSyncvsLumisection",
+	      "Number of channels OutOfSync vs Lumisection",
+	      0,
+	      42241, //total number of channels
+	      "Lumisection",
 	      "# channels out-of-sync"
 	      );
 
@@ -706,6 +809,14 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      "Time",
 	      "# APVs with APVStatusBit error"
 	      );
+  bookProfile(nAPVStatusBitvsLumisection_,                                
+	      "nAPVStatusBitvsLumisection",
+	      "Number of APVs with APVStatusBit error vs Lumisection",
+	      0,
+	      42241, //total number of channels
+	      "Lumisection",
+	      "# APVs with APVStatusBit error"
+	      );
 
   bookProfile(nAPVErrorvsTime_,
 	      "nAPVErrorvsTime",
@@ -715,6 +826,14 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      "Time",
 	      "# APVs with APVError"
 	      );
+  bookProfile(nAPVErrorvsLumisection_,                        
+	      "nAPVErrorvsLumisection",
+	      "Number of APVs with APVError vs Lumisection",
+	      0,
+	      42241, //total number of channels
+	      "Lumisection",
+	      "# APVs with APVError"
+	      );
 
   bookProfile(nAPVAddressErrorvsTime_,
 	      "nAPVAddressErrorvsTime",
@@ -722,6 +841,14 @@ void FEDHistograms::bookTopLevelHistograms(DQMStore* dqm, std::string topFolderN
 	      0,
 	      42241, //total number of channels
 	      "Time",
+	      "# APVs with APVAddressError"
+	      );
+  bookProfile(nAPVAddressErrorvsLumisection_,                   
+	      "nAPVAddressErrorvsLumisection",
+	      "Number of APVs with APVAddressError vs Lumisection",
+	      0,
+	      42241, //total number of channels
+	      "Lumisection",
 	      "# APVs with APVAddressError"
 	      );
 
